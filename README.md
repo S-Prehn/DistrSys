@@ -8,25 +8,25 @@
 
 The java scripts can be compiled executing the attached bash script [compile.sh](./compile.sh) with: `bash compile.sh`
 
-The InvertServer takes as input the port number it should connect to, like for instance: `java InvertServer 8000`
+The SocketInvertServer takes as input the port number it should connect to, like for instance: `java SocketInvertServer 8000`
 
-The InvertClient Module takes as input the name of the machine that hosts the InvertServer and the server's port id. For instance, assuming that server and client run on the same machine the compiled script can be run with: `java InvertClient $HOSTNAME 8000`
+The SocketInvertClient Module takes as input the name of the machine that hosts the SocketInvertServer and the server's port id. For instance, assuming that server and client run on the same machine the compiled script can be run with: `java SocketInvertClient $HOSTNAME 8000`
 
 ## Content Source Files
 
 The code from the files (without the copyright notes that are in the scripts) are:
 
-### InvertClient:
+### SocketInvertClient:
 
 import java.io.*;
 import java.net.*;
 
-public class InvertClient {
+public class SocketInvertClient {
     public static void main(String[] args) throws IOException {
 
         if (args.length != 2) {
             System.err.println(
-                "Usage: java InvertClient <host name> <port number>");
+                "Usage: java SocketInvertClient <host name> <port number>");
             System.exit(1);
         }
 
@@ -60,12 +60,12 @@ public class InvertClient {
     }
 }
 
-### InvertServer:
+### SocketInvertServer:
 
 import java.net.*;
 import java.io.*;
 
-public class InvertServer {
+public class SocketInvertServer {
 
     public static String invert_str(String str) {
         char ch[] = str.toCharArray();
@@ -79,7 +79,7 @@ public class InvertServer {
     public static void main(String[] args) throws IOException {
 
         if (args.length != 1) {
-            System.err.println("Usage: java InvertServer <port number>");
+            System.err.println("Usage: java SocketInvertServer <port number>");
             System.exit(1);
         }
 

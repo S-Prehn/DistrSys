@@ -1,4 +1,4 @@
 #!/bin/bash
 pwd
-javac InvertClient.java
-javac InvertServer.java
+javac SocketInvertClient.java
+javac SocketInvertServer.java

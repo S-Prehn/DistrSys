@@ -1,53 +1,49 @@
-// This is a modification of Java's official EchoClient script. For more detail consult the copyright note in the end of the file. 
-// Input: Portnumber
-
-import java.net.*;
+// This is a modification of Java's official EchoClient script. For more detail consult the copyright note in the end of the file.
+// Input: Name of host machine running the SocketInvertServer, Portnumber
 import java.io.*;
+import java.net.*;
 
-public class InvertServer {
-    
-    public static String invert_str(String str) {
-        char ch[] = str.toCharArray();  
-        String invert="";  
-        for (int i= ch.length-1; i>=0; i--) {  
-            invert += ch[i];  
-        }
-        return invert;
-    }
-    
+public class SocketInvertClient {
     public static void main(String[] args) throws IOException {
         
-        if (args.length != 1) {
-            System.err.println("Usage: java InvertServer <port number>");
+        if (args.length != 2) {
+            System.err.println(
+                "Usage: java SocketInvertClient <host name> <port number>");
             System.exit(1);
         }
-        
-        int portNumber = Integer.parseInt(args[0]);
-        
+
+        String hostName = args[0];
+        int portNumber = Integer.parseInt(args[1]);
+
         try (
-            ServerSocket serverSocket =
-                new ServerSocket(Integer.parseInt(args[0]));
-            Socket clientSocket = serverSocket.accept();     
+            Socket invertSocket = new Socket(hostName, portNumber);
             PrintWriter out =
-                new PrintWriter(clientSocket.getOutputStream(), true);                   
-            BufferedReader in = new BufferedReader(
-                new InputStreamReader(clientSocket.getInputStream()));
+                new PrintWriter(invertSocket.getOutputStream(), true);
+            BufferedReader in =
+                new BufferedReader(
+                    new InputStreamReader(invertSocket.getInputStream()));
+            BufferedReader stdIn =
+                new BufferedReader(
+                    new InputStreamReader(System.in))
         ) {
-            String inputLine;
-            while ((inputLine = in.readLine()) != null) {
-                System.out.println("Invert Server received: " + inputLine);
-                out.println(invert_str(inputLine));
+            String userInput;
+            while ((userInput = stdIn.readLine()) != null) {
+                out.println(userInput);
+                System.out.println("Client received: " + in.readLine());
             }
+        } catch (UnknownHostException e) {
+            System.err.println("Don't know about host " + hostName);
+            System.exit(1);
         } catch (IOException e) {
-            System.out.println("Exception caught when trying to listen on port "
-                + portNumber + " or listening for a connection");
-            System.out.println(e.getMessage());
-        }
+            System.err.println("Couldn't get I/O for the connection to " +
+                hostName);
+            System.exit(1);
+        } 
     }
 }
 
 /*
- * Copyright (c) 2013, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1995, 2013, Oracle and/or its affiliates. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -75,4 +71,4 @@ public class InvertServer {
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+ */ 
