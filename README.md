@@ -4,13 +4,24 @@
 * Shubham Jinde : S3993914
 * Sebastian Prehn : S3013472
 
-## General Information
+## Run Instructions:
 
-The java scripts can be compiled executing the attached bash script [compile.sh](./compile.sh) with: `bash compile.sh`
+* The java scripts can be compiled executing the attached bash script [compile.sh](./compile.sh) with: `bash compile.sh`
 
-The SocketInvertServer takes as input the port number it should connect to, like for instance: `java SocketInvertServer 8000`
+### Part a: Socket Implementation:
 
-The SocketInvertClient Module takes as input the name of the machine that hosts the SocketInvertServer and the server's port id. For instance, assuming that server and client run on the same machine the compiled script can be run with: `java SocketInvertClient $HOSTNAME 8000`
+* The `SocketInvertServer` takes as input the port number it should connect to, like for instance: `java SocketInvertServer <port-number>`
+* The `SocketInvertClient` Module takes as input the name of the machine that hosts the `SocketInvertServer` and the server's port id. For instance, assuming that server and client run on the same machine the compiled script can be run with: `java SocketInvertClient <server-host> <server-port>`
+* Enter strings to invert in the client terminal
+
+___
+
+### Part b: RMI Implementation:
+
+* Start the RMI registry in background with the command: `rmiregistry &`
+* Start the RMI server using the command: `java RMIInvertServer`
+* Start the RMI client using the command: `java RMIInvertClient <server-host>`
+* Enter strings to invert in the client terminal
 
 ## Content Source Files
 
@@ -18,6 +29,7 @@ The code from the files (without the copyright notes that are in the scripts) ar
 
 ### SocketInvertClient:
 
+```java
 import java.io.*;
 import java.net.*;
 
@@ -59,9 +71,11 @@ public class SocketInvertClient {
         }
     }
 }
+```
 
 ### SocketInvertServer:
 
+```java
 import java.net.*;
 import java.io.*;
 
@@ -106,3 +120,81 @@ public class SocketInvertServer {
         }
     }
 }
+```
+
+### RMIStringInvertInterface
+
+```java
+import java.rmi.*;
+
+public interface RMIStringInvertInterface extends Remote {
+    public String invert_str(String str) throws RemoteException;
+}
+```
+
+### RMIStringInvert
+
+```java
+import java.rmi.*;
+import java.rmi.server.*;
+
+public class RMIStringInvert extends UnicastRemoteObject implements RMIStringInvertInterface {
+    public RMIStringInvert() throws RemoteException {}
+
+    public String invert_str(String str) throws RemoteException {
+        System.out.println("RMI Server Received: " + str);
+        return new StringBuffer(str).reverse().toString();
+    }
+}
+
+```
+
+### RMIInvertServer
+
+```java
+
+import java.rmi.*;
+import java.rmi.server.*;
+
+public class RMIInvertServer {
+    public static void main(String[] args) {
+        try {
+            Naming.rebind("rmi-string-invert", new RMIStringInvert());
+            System.out.println("RMI Server is running");
+        } catch(Exception e) {
+            System.out.println("RMI Server failed: " + e);
+        }
+    }
+}
+
+```
+
+### RMIInvertClient
+
+```java
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.rmi.*;
+
+public class RMIInvertClient {
+    public static void main(String[] args) {
+        try {
+            if (args.length < 0) {
+                System.err.println("usage: java RMIInvertClient <host> …\n");
+                System.exit(1);
+            }
+            String url = "//" + args[0] + "/rmi-string-invert";
+            RMIStringInvertInterface strInvert = (RMIStringInvertInterface) Naming.lookup(url);
+
+            BufferedReader stdIn =  new BufferedReader(new InputStreamReader(System.in));
+
+            String userInput;
+            while ((userInput = stdIn.readLine()) != null) {
+                System.out.println("RMI Invert Client Received: " + strInvert.invert_str(userInput));
+            }
+        } catch (Exception e) {
+            System.out.println("RMIInvertClient exception: " + e);
+        }
+    }
+}
+```
