@@ -8,6 +8,11 @@ Sebastian Prehn S3013472
 
 The java scripts can be compiled executing the attached bash script 'compile.sh' with: "bash compile.sh"
 
+
+The InvertServer takes as input the port number it should connect to, like for instance: "java InvertServer 8000"
+
+The InvertClient Module takes as input the name of the machine that hosts the InvertServer and the server's port id. For instance, assuming that server and client run on the same machine the compiled script can be run with: "java InvertClient $HOSTNAME 8000"
+
 ## Contentn Source Files
 
 The code from the files (without the copyright notes that are in the scripts) are:
