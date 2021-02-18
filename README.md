@@ -1,19 +1,18 @@
 # Distributed Systems - Assignment 2 - Group 12
 
-Deepshi Garg S4199456
-Shubham Jinde S3993914
-Sebastian Prehn S3013472
+* Deepshi Garg : S4199456
+* Shubham Jinde : S3993914
+* Sebastian Prehn : S3013472
 
 ## General Information
 
-The java scripts can be compiled executing the attached bash script 'compile.sh' with: "bash compile.sh"
+The java scripts can be compiled executing the attached bash script [compile.sh](./compile.sh) with: `bash compile.sh`
 
+The InvertServer takes as input the port number it should connect to, like for instance: `java InvertServer 8000`
 
-The InvertServer takes as input the port number it should connect to, like for instance: "java InvertServer 8000"
+The InvertClient Module takes as input the name of the machine that hosts the InvertServer and the server's port id. For instance, assuming that server and client run on the same machine the compiled script can be run with: `java InvertClient $HOSTNAME 8000`
 
-The InvertClient Module takes as input the name of the machine that hosts the InvertServer and the server's port id. For instance, assuming that server and client run on the same machine the compiled script can be run with: "java InvertClient $HOSTNAME 8000"
-
-## Contentn Source Files
+## Content Source Files
 
 The code from the files (without the copyright notes that are in the scripts) are:
 
@@ -24,7 +23,7 @@ import java.net.*;
 
 public class InvertClient {
     public static void main(String[] args) throws IOException {
-        
+
         if (args.length != 2) {
             System.err.println(
                 "Usage: java InvertClient <host name> <port number>");
@@ -57,7 +56,7 @@ public class InvertClient {
             System.err.println("Couldn't get I/O for the connection to " +
                 hostName);
             System.exit(1);
-        } 
+        }
     }
 }
 
@@ -67,31 +66,31 @@ import java.net.*;
 import java.io.*;
 
 public class InvertServer {
-    
+
     public static String invert_str(String str) {
-        char ch[] = str.toCharArray();  
-        String invert="";  
-        for (int i= ch.length-1; i>=0; i--) {  
-            invert += ch[i];  
+        char ch[] = str.toCharArray();
+        String invert="";
+        for (int i= ch.length-1; i>=0; i--) {
+            invert += ch[i];
         }
         return invert;
     }
-    
+
     public static void main(String[] args) throws IOException {
-        
+
         if (args.length != 1) {
             System.err.println("Usage: java InvertServer <port number>");
             System.exit(1);
         }
-        
+
         int portNumber = Integer.parseInt(args[0]);
-        
+
         try (
             ServerSocket serverSocket =
                 new ServerSocket(Integer.parseInt(args[0]));
-            Socket clientSocket = serverSocket.accept();     
+            Socket clientSocket = serverSocket.accept();
             PrintWriter out =
-                new PrintWriter(clientSocket.getOutputStream(), true);                   
+                new PrintWriter(clientSocket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(
                 new InputStreamReader(clientSocket.getInputStream()));
         ) {
