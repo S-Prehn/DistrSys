@@ -198,3 +198,50 @@ public class RMIInvertClient {
     }
 }
 ```
+
+###  Part c: Is it possible to achieve “Exactly-Once” semantics for RMI method invocations?
+
+* `RPC(Remote Procedure Call)` allows client programs to call procedure in server programs running in different processes/system
+
+* `RPI(Remote Procedure Invocation)` allows an object living in one process to invoke the methods of an object living in another process.
+
+* `RPI(Remote Procedure Invocation)` involves invocations between objects in different processes, whether in the same computer or not. Any remote invocation may fail for reason related to the invoked object being in different computer or different process other than invoker. 
+
+* The invocation procedure is implemented by using request-reply protocol to provide different delivery guarantees. 
+
+* Main Design Choices for Implementing RMI - 
+   
+    Retry request message - Whether to retransmit request message when server has failed or reply is not received.
+
+    Duplicate Filtering   - In case of retransmission whether to filter out duplicate requests or not.
+
+    Retransmission of results - Whether to keep history of results to enable lost results are retransmitted with re-execution on the server. 
+
+* Combination of these choices can lead to following semantics
+    
+    Maybe - The remote procedure may be executed excatly once or not at all. This semantics arises when there is no fault tolerance measure applied. 
+
+    At Least Once - This is achieved by retransmission of request messages. The retranmission will take place if there is exception and the invoker  did not receive any results. The exception may happen if the server crashes  
+
+    At-Most-Once - This is achieved by using the combination of fault tolerance measures(retransmission and duplicate filtering). The duplicate filtering will be done by the server. 
+
+* Thus under failures/exception and how the system handles failure/exceptions it is very difficult(not possible) to achieve excatly once semantics. This is because the server may not execute the function in the following cases
+
+    * Request message is dropped
+    * Reply message is dropped 
+    * Called process fails before executing request
+    * Called process fails after executing request
+    * Also it is hard for the server to know where excatly failure has taken place in the last two conditions
+
+* Also the function may be executed multiple times if
+    * If request message is transmitted multiple times.  
+
+* Thus it is not possible to achieve excatly once semantics for RMI method invocation.      
+
+
+
+
+
+
+
+
