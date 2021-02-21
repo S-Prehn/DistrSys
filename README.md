@@ -255,9 +255,9 @@ public class RMIInvertClientAtLeastOnce {
 
     At Least Once - This is achieved by retransmission of request messages. The retranmission will take place if there is exception and the invoker  did not receive any results. The exception may happen if the server crashes  
 
-    At-Most-Once - This is achieved by using the combination of fault tolerance measures(retransmission and duplicate filtering). The duplicate filtering will be done by the server. 
+    At-Most-Once - This is achieved by using the combination of fault tolerance measures (retransmission and duplicate filtering). The duplicate filtering will be done by the server. 
 
-* Thus under failures/exception and how the system handles failure/exceptions it is very difficult(not possible) to achieve excatly once semantics. This is because the server may not execute the function in the following cases
+* Thus under failures/exception and how the system handles failure/exceptions it is very difficult to achieve excatly once semantics. This is because the server may not execute the function in the following cases
 
     * Request message is dropped
     * Reply message is dropped 
@@ -268,6 +268,6 @@ public class RMIInvertClientAtLeastOnce {
 * Also the function may be executed multiple times if
     * If request message is transmitted multiple times.  
 
-* Thus it is not possible to achieve excatly once semantics for RMI method invocation.      
+* Thus, it is not possible to achieve excatly once semantics for RMI method invocation.      
 
 
