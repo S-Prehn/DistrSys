@@ -23,6 +23,12 @@ ___
 * Start the RMI client using the command: `java RMIInvertClient <server-host>`
 * Enter strings to invert in the client terminal
 
+### Part c: RMI Implementation With At Least Once Message Execution:
+
+* Start the RMI registry in background with the command: `rmiregistry &`
+* Start the RMI server using the command: `java RMIInvertServer`
+* Start the RMI client using the command: `java RMIInvertClient <server-host> <input-string>`
+
 ## Content Source Files
 
 The code from the files (without the copyright notes that are in the scripts) are:
@@ -194,6 +200,31 @@ public class RMIInvertClient {
             }
         } catch (Exception e) {
             System.out.println("RMIInvertClient exception: " + e);
+        }
+    }
+}
+```
+
+### RMIInvertClientAtLeastOnce
+
+```java
+import java.rmi.*;
+
+public class RMIInvertClientAtLeastOnce {
+    public static void main(String[] args) {
+        while (true) {
+            try {
+                if (args.length != 2) {
+                    System.err.println("usage: java RMIInvertClientAtLeastOnce <host> <input> …\n");
+                    System.exit(1);
+                }
+                String url = "//" + args[0] + "/rmi-string-invert";
+                RMIStringInvertInterface strInvert = (RMIStringInvertInterface) Naming.lookup(url);
+                System.out.println("RMI Invert Client Received: " + strInvert.invert_str(args[1]));
+                break;
+            } catch (Exception e) {
+                System.out.println("RMIInvertClient exception: " + e);
+            }
         }
     }
 }

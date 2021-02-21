@@ -6,3 +6,4 @@ javac SocketInvertServer.java
 javac RMIStringInvertInterface.java RMIStringInvert.java
 javac RMIInvertServer.java
 javac RMIInvertClient.java
+javac RMIInvertClientAtLeastOnce.java
