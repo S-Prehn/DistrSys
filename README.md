@@ -229,8 +229,7 @@ public class RMIInvertClientAtLeastOnce {
     }
 }
 ```
-
-```
+---
 ###  Part d: Is it possible to achieve “Exactly-Once” semantics for RMI method invocations?
 
 * `RPC(Remote Procedure Call)` allows client programs to call procedure in server programs running in different processes/system
